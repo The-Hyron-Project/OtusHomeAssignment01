@@ -22,6 +22,8 @@
         <spring-context.version>7.0.10</spring-context.version>
         <assertj-core.version>3.26.3</assertj-core.version>
         <spring-test.version>7.0.10</spring-test.version>
+        <javafaker.version>1.0.2</javafaker.version>
+
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -59,6 +61,11 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>${spring-test.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>${javafaker.version}</version>
         </dependency>
     </dependencies>
 
