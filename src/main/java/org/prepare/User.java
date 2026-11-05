@@ -11,7 +11,7 @@ public class User {
     private String email;
 
     public User(){
-        userName = faker.expression("\\w{9}");
+        userName = faker.name().username().replace(".", "");
         password = faker.internet().password(9, 10);
         email = faker.internet().emailAddress();
     }

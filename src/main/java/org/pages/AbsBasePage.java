@@ -2,10 +2,15 @@ package org.pages;
 
 import org.annotations.Path;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 
-public abstract class AbsBasePage<T> extends AbsCommons {
+public abstract class AbsBasePage extends AbsCommons {
+
+    @FindBy(css = "h2")
+    protected WebElement pageHeader;
 
     public AbsBasePage(WebDriver driver) {
         super(driver);
@@ -23,13 +28,11 @@ public abstract class AbsBasePage<T> extends AbsCommons {
         return "";
     }
 
-    public T open() {
-        driver.get(baseUrl);
-        return (T) this;
+    public void open() {
+        driver.get(baseUrl + getPath());
     }
 
-    public void authorize(String userName, String password) {
-        driver.get(baseUrl);
 
-    }
+
+
 }
