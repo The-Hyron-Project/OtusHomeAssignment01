@@ -26,7 +26,7 @@ public class RegistrationPage extends AbsMainPage {
     }
 
 
-    public void prepareData(User user){
+    public void prepareUser(User user){
         if(!Objects.equals(pageHeader.getText(), "Регистрация")){
             fail(String.format("Страница регистрации не открыта."));
         }

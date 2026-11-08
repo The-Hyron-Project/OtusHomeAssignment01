@@ -8,7 +8,7 @@ public class BrowserChromeOptions implements IBrowserSettings{
     @Override
     public AbstractDriverOptions settings() {
         ChromeOptions options = new ChromeOptions();
-//        options.addArguments("--start-fullscreen");
+        options.addArguments("--window-size=1366,768");
         return options;
     }
 }

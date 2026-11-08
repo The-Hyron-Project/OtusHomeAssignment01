@@ -19,7 +19,7 @@ public class Waiters {
 
     private boolean waitForCondition(ExpectedCondition condition) {
         try{
-            new WebDriverWait(driver, Duration.ofSeconds(10)).until(condition);
+            new WebDriverWait(driver, Duration.ofSeconds(5)).until(condition);
             return true;
         } catch (TimeoutException ignored) {
             return false;
@@ -28,6 +28,10 @@ public class Waiters {
 
     public boolean waitForElementToBeVisible(By locator) {
         return waitForCondition(ExpectedConditions.visibilityOfElementLocated(locator));
+    }
+
+    public boolean waitForElementNotToBeVisible(By locator) {
+        return waitForCondition(ExpectedConditions.not(ExpectedConditions.visibilityOfElementLocated(locator)));
     }
 
     public boolean waitForNumberOfElementsToBe(By locator, int amount) {
