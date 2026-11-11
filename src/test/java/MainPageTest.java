@@ -74,7 +74,9 @@ public class MainPageTest {
 
     @Test
     public void assignment02ObviousExpectationsTest(){
-//        Регистрация пользователя
+//        Подготовка данных для теста
+//        (т.к. данные подготавливаются через UI,
+//        код подготовки находится в тестовом методе)
         registrationPage.open();
         registrationPage.prepareUser(user);
 //        Начало теста
@@ -87,23 +89,51 @@ public class MainPageTest {
     }
 
     @Test
-    public void assignment03UserSearchAndTheirCardHighlight(){
+    public void assignment03UserSearchAndTheirCardHighlight(@Autowired User user2, @Autowired User user3){
+//        Подготовка данных для теста
+//        (т.к. данные подготавливаются через UI,
+//        код подготовки находится в тестовом методе)
         registrationPage.open();
-//        Регистрация нескольких пользователей
         registrationPage.prepareUser(user);
-//      для второго пользователя заводим список подарков
-//        Начало теста
+        registrationPage.open();
+        registrationPage.prepareUser(user2);
         authorizationPage.open();
-        profilePage = authorizationPage.authorize(user);
+        profilePage = authorizationPage.authorize(user2);
         profilePage.waitForPageToLoad();
         profilePage.checkIfAuthorizationSuccessful();
+        profilePage.checkIfThereAreNoGiftLists();
+        profilePage.createGiftList();
+        profilePage.checkIfThereIsOnlyOneGiftList();
+        wishlistPage = profilePage.openFirstGiftList();
+        wishlistPage.fillGiftList(GiftList.giftList);
+        profilePage.open();
+        profilePage.checkIfThereIsOnlyOneGiftList();
+        profilePage.logOut();
+        wishlistPage = null;
+        profilePage = null;
+        registrationPage.open();
+        registrationPage.prepareUser(user3);
+//        Начало теста
+        authorizationPage.open();
+        profilePage = authorizationPage.authorize(user3);
+        profilePage.waitForPageToLoad();
+        profilePage.checkIfAuthorizationSuccessful();
+        profilePage.checkIfThereAreNoGiftLists();
         usersPage = profilePage.goToUsersPage();
         usersPage.waitForUserListToLoad();
 //      находим второго из ранее зарегистрированных пользователей
+//      поиск осуществляется через докоратор, которые создаётся специально в методе поиска и для поиска контретного элемента
 //      скроллим окно к его карточке
 //      подсвечиваем её
 //      заходим на карточку пользователя
 //      проверяем, что отображаемтся список желаний именно второго пользователя
+        profilePage.logOut();
+        //      Постусловие (очистка).
+        authorizationPage.open();
+        profilePage = authorizationPage.authorize(user2);
+        profilePage.waitForPageToLoad();
+        profilePage.checkIfAuthorizationSuccessful();
+        profilePage.deleteGiftList();
     }
 
 }

@@ -37,6 +37,7 @@ public class TestConfiguration {
     }
 
     @Bean
+    @Scope("prototype")
     public User getUser() {
         return new User();
     }
