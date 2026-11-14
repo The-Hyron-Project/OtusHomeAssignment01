@@ -1,9 +1,14 @@
 package org.exceptions;
 
-public class BrowserNotSupportedException extends RuntimeException{
+/** Исключение, выбрасываемое при попытке использования неподдерживаемого браузера. */
+public class BrowserNotSupportedException extends RuntimeException {
 
-    public BrowserNotSupportedException(String browser){
-        super(String.format("Browser %s not supported", browser));
-    }
+  /**
+   * Создаёт новое исключение с указанием имени неподдерживаемого браузера.
+   *
+   * @param browser название неподдерживаемого браузера
+   */
+  public BrowserNotSupportedException(String browser) {
+    super(String.format("Browser %s not supported", browser));
+  }
 }
-

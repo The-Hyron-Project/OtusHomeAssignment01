@@ -17,17 +17,18 @@
         <compiler.version>3.16.0</compiler.version>
         <surefire.version>3.6.0</surefire.version>
         <checkstyle.version>3.6.0</checkstyle.version>
-        <spotbugs.version>4.10.5.0</spotbugs.version>
+        <spotbugsPlugin.version>4.10.5.0</spotbugsPlugin.version>
         <webdrivermanager.version>6.4.0</webdrivermanager.version>
         <spring-context.version>7.0.10</spring-context.version>
         <assertj-core.version>3.26.3</assertj-core.version>
         <spring-test.version>7.0.10</spring-test.version>
         <javafaker.version>1.0.2</javafaker.version>
-
+        <spotbugs.version>4.10.5</spotbugs.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <base.url>https://wishlist.otus.kartushin.su</base.url>
+        <browser.name>chrome</browser.name>
     </properties>
 
 
@@ -67,6 +68,11 @@
             <artifactId>javafaker</artifactId>
             <version>${javafaker.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs</artifactId>
+            <version>${spotbugs.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -87,7 +93,7 @@
                 <configuration>
                     <systemPropertyVariables>
                         <base.url>${base.url}</base.url>
-                        <browser.name>chrome</browser.name>
+                        <browser.name>${browser.name}</browser.name>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
@@ -115,7 +121,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>${spotbugs.version}</version>
+                <version>${spotbugsPlugin.version}</version>
             </plugin>
         </plugins>
     </build>
