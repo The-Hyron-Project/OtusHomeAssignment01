@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = TestConfiguration.class)
@@ -65,10 +66,21 @@ public class MainPageTest {
         wishlistPage = mineProfilePage.openFirstGiftList();
         ArrayList<Gift> GiftListActual = wishlistPage.collectGiftListPositions();
         Gift theMostExpensiveGiftExpected = GiftList.giftList.stream().max(Comparator.comparingInt(g -> Integer.parseInt(g.getPrice()))).get();
-        Gift theMostExpensiveGiftActual = GiftListActual.stream().max(Comparator.comparingInt(g -> Integer.parseInt(g.getPrice().replace("Цена: ","").replace(" руб.","")))).get();
+        Gift theMostExpensiveGiftActual = GiftListActual.stream()
+                .filter(g -> g.getPrice().replace("Цена: ", "").replace(" руб.", "").equals(theMostExpensiveGiftExpected.getPrice()))
+                .reduce((a, b) -> {
+                    throw new IllegalStateException("Найдено больше одного элемента!");
+                })
+                .orElseThrow(() -> new NoSuchElementException("Элемент не найден!"));
+
         wishlistPage.checkIfTwoGiftsAreEqual(theMostExpensiveGiftActual, theMostExpensiveGiftExpected);
         Gift theCheapestGiftExpected = GiftList.giftList.stream().min(Comparator.comparingInt(g -> Integer.parseInt(g.getPrice()))).get();
-        Gift theCheapestGiftActual = GiftListActual.stream().min(Comparator.comparingInt(g -> Integer.parseInt(g.getPrice().replace("Цена: ","").replace(" руб.","")))).get();
+        Gift theCheapestGiftActual = GiftListActual.stream()
+                .filter(g -> g.getPrice().replace("Цена: ", "").replace(" руб.", "").equals(theCheapestGiftExpected.getPrice()))
+                .reduce((a, b) -> {
+                    throw new IllegalStateException("Найдено больше одного элемента!");
+                })
+                .orElseThrow(() -> new NoSuchElementException("Элемент не найден!"));
         wishlistPage.checkIfTwoGiftsAreEqual(theCheapestGiftActual, theCheapestGiftExpected);
 //      Постусловие (очистка).
         mineProfilePage.open();
