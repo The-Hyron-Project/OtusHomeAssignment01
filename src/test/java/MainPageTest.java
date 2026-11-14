@@ -1,10 +1,12 @@
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.WebDriver;
 import org.pages.*;
 import org.prepare.Gift;
 import org.prepare.GiftList;
 import org.prepare.User;
 import org.springconfiguration.TestConfiguration;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -27,9 +29,10 @@ public class MainPageTest {
     @Autowired
     private User user;
 
-    ProfilePage profilePage;
+    ProfilePage mineProfilePage;
     UsersPage usersPage;
     WishlistPage wishlistPage;
+    ProfilePage usersProfilePage;
 
     @Test
     public void assignment01SelectMostExpensiveAndCheapestPresentsTest(){
@@ -39,27 +42,27 @@ public class MainPageTest {
         registrationPage.open();
         registrationPage.prepareUser(user);
         authorizationPage.open();
-        profilePage = authorizationPage.authorize(user);
-        profilePage.waitForPageToLoad();
-        profilePage.checkIfAuthorizationSuccessful();
-        profilePage.checkIfThereAreNoGiftLists();
-        profilePage.createGiftList();
-        profilePage.checkIfThereIsOnlyOneGiftList();
-        wishlistPage = profilePage.openFirstGiftList();
+        mineProfilePage = authorizationPage.authorize(user);
+        mineProfilePage.waitForPageToLoad();
+        mineProfilePage.checkIfAuthorizationSuccessful();
+        mineProfilePage.checkIfThereAreNoGiftLists();
+        mineProfilePage.createGiftList();
+        mineProfilePage.checkIfThereIsOnlyOneGiftList();
+        wishlistPage = mineProfilePage.openFirstGiftList();
         wishlistPage.fillGiftList(GiftList.giftList);
-        profilePage.open();
-        profilePage.checkIfThereIsOnlyOneGiftList();
-        profilePage.logOut();
+        mineProfilePage.open();
+        mineProfilePage.checkIfThereIsOnlyOneGiftList();
+        mineProfilePage.logOut();
         wishlistPage = null;
-        profilePage = null;
+        mineProfilePage = null;
         registrationPage = null;
 //        Начало теста
         authorizationPage.open();
-        profilePage = authorizationPage.authorize(user);
-        profilePage.waitForPageToLoad();
-        profilePage.checkIfAuthorizationSuccessful();
-        profilePage.checkIfThereIsOnlyOneGiftList();
-        wishlistPage = profilePage.openFirstGiftList();
+        mineProfilePage = authorizationPage.authorize(user);
+        mineProfilePage.waitForPageToLoad();
+        mineProfilePage.checkIfAuthorizationSuccessful();
+        mineProfilePage.checkIfThereIsOnlyOneGiftList();
+        wishlistPage = mineProfilePage.openFirstGiftList();
         ArrayList<Gift> GiftListActual = wishlistPage.collectGiftListPositions();
         Gift theMostExpensiveGiftExpected = GiftList.giftList.stream().max(Comparator.comparingInt(g -> Integer.parseInt(g.getPrice()))).get();
         Gift theMostExpensiveGiftActual = GiftListActual.stream().max(Comparator.comparingInt(g -> Integer.parseInt(g.getPrice().replace("Цена: ","").replace(" руб.","")))).get();
@@ -68,8 +71,8 @@ public class MainPageTest {
         Gift theCheapestGiftActual = GiftListActual.stream().min(Comparator.comparingInt(g -> Integer.parseInt(g.getPrice().replace("Цена: ","").replace(" руб.","")))).get();
         wishlistPage.checkIfTwoGiftsAreEqual(theCheapestGiftActual, theCheapestGiftExpected);
 //      Постусловие (очистка).
-        profilePage.open();
-        profilePage.deleteGiftList();
+        mineProfilePage.open();
+        mineProfilePage.deleteGiftList();
     }
 
     @Test
@@ -81,15 +84,15 @@ public class MainPageTest {
         registrationPage.prepareUser(user);
 //        Начало теста
         authorizationPage.open();
-        profilePage = authorizationPage.authorize(user);
-        profilePage.waitForPageToLoad();
-        profilePage.checkIfAuthorizationSuccessful();
-        usersPage = profilePage.goToUsersPage();
+        mineProfilePage = authorizationPage.authorize(user);
+        mineProfilePage.waitForPageToLoad();
+        mineProfilePage.checkIfAuthorizationSuccessful();
+        usersPage = mineProfilePage.goToUsersPage();
         usersPage.waitForUserListToLoad();
     }
 
     @Test
-    public void assignment03UserSearchAndTheirCardHighlight(@Autowired User user2, @Autowired User user3){
+    public void assignment03UserSearchAndTheirCardHighlight(@Autowired User user2, @Autowired User user3, @Qualifier("decoratedDriver") WebDriver decoratedDriver){
 //        Подготовка данных для теста
 //        (т.к. данные подготавливаются через UI,
 //        код подготовки находится в тестовом методе)
@@ -98,42 +101,43 @@ public class MainPageTest {
         registrationPage.open();
         registrationPage.prepareUser(user2);
         authorizationPage.open();
-        profilePage = authorizationPage.authorize(user2);
-        profilePage.waitForPageToLoad();
-        profilePage.checkIfAuthorizationSuccessful();
-        profilePage.checkIfThereAreNoGiftLists();
-        profilePage.createGiftList();
-        profilePage.checkIfThereIsOnlyOneGiftList();
-        wishlistPage = profilePage.openFirstGiftList();
+        mineProfilePage = authorizationPage.authorize(user2);
+        mineProfilePage.waitForPageToLoad();
+        mineProfilePage.checkIfAuthorizationSuccessful();
+        mineProfilePage.checkIfThereAreNoGiftLists();
+        mineProfilePage.createGiftList();
+        mineProfilePage.checkIfThereIsOnlyOneGiftList();
+        wishlistPage = mineProfilePage.openFirstGiftList();
         wishlistPage.fillGiftList(GiftList.giftList);
-        profilePage.open();
-        profilePage.checkIfThereIsOnlyOneGiftList();
-        profilePage.logOut();
+        mineProfilePage.open();
+        mineProfilePage.checkIfThereIsOnlyOneGiftList();
+        mineProfilePage.logOut();
         wishlistPage = null;
-        profilePage = null;
+        mineProfilePage = null;
         registrationPage.open();
         registrationPage.prepareUser(user3);
 //        Начало теста
         authorizationPage.open();
-        profilePage = authorizationPage.authorize(user3);
-        profilePage.waitForPageToLoad();
-        profilePage.checkIfAuthorizationSuccessful();
-        profilePage.checkIfThereAreNoGiftLists();
-        usersPage = profilePage.goToUsersPage();
+        mineProfilePage = authorizationPage.authorize(user3);
+        mineProfilePage.waitForPageToLoad();
+        mineProfilePage.checkIfAuthorizationSuccessful();
+        mineProfilePage.checkIfThereAreNoGiftLists();
+        usersPage = mineProfilePage.goToUsersPage();
         usersPage.waitForUserListToLoad();
-//      находим второго из ранее зарегистрированных пользователей
-//      поиск осуществляется через докоратор, которые создаётся специально в методе поиска и для поиска контретного элемента
-//      скроллим окно к его карточке
-//      подсвечиваем её
-//      заходим на карточку пользователя
-//      проверяем, что отображаемтся список желаний именно второго пользователя
-        profilePage.logOut();
+        usersPage.scrollDownToUserCard(user2);
+        usersPage.highlightUserCard(user2, decoratedDriver);
+        usersProfilePage = usersPage.openUserWishList(user2);
+        usersProfilePage.checkIfThereIsOnlyOneGiftList();
+        usersProfilePage.checkIfCurrentPageIsAPageWithUsersWishlists();
+        usersProfilePage.checkIfWishlistHasExpectedName();
+        usersProfilePage.checkIfWishlistHasExpectedDescription();
+        usersProfilePage.logOut();
         //      Постусловие (очистка).
         authorizationPage.open();
-        profilePage = authorizationPage.authorize(user2);
-        profilePage.waitForPageToLoad();
-        profilePage.checkIfAuthorizationSuccessful();
-        profilePage.deleteGiftList();
+        mineProfilePage = authorizationPage.authorize(user2);
+        mineProfilePage.waitForPageToLoad();
+        mineProfilePage.checkIfAuthorizationSuccessful();
+        mineProfilePage.deleteGiftList();
     }
 
 }

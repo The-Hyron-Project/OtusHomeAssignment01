@@ -4,10 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.prepare.Gift;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -21,6 +19,8 @@ public class ProfilePage extends AbsBasePage {
     protected WebElement exitLink;
     @FindBy(css = "[class='btn btn-primary']")
     protected WebElement createListButton;
+    @FindBy(css = "[class='mb-4']")
+    protected WebElement usersWishListsHeader;
 
 
 
@@ -94,5 +94,17 @@ public class ProfilePage extends AbsBasePage {
 
     public void waitForGiftListCardAddButtonToAppear(){
         waiters.waitForNumberOfElementsToBe(By.cssSelector("[class='card']"), 1);
+    }
+
+    public void checkIfCurrentPageIsAPageWithUsersWishlists(){
+        assertThat(usersWishListsHeader.getText()).as("Заголовок страницы профиля отличается").isEqualTo("Списки желаний пользователя");
+    }
+
+    public void checkIfWishlistHasExpectedName(){
+        assertThat(driver.findElement(By.cssSelector("[class='card-body'] [class='card-title h5']")).getText()).as("Название списка желаний отличается").isEqualTo("Тестовый список желаний");
+    }
+
+    public void checkIfWishlistHasExpectedDescription(){
+        assertThat(driver.findElement(By.cssSelector("[class='card-body'] [class='card-text']")).getText()).as("Описание списка желаний отличается").isEqualTo("Описание тестового списка желаний");
     }
 }
